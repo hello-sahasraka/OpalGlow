@@ -1,6 +1,9 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config()
+
 
 export function saveUser(req,res){
 
@@ -63,9 +66,9 @@ export function loginUser(req,res){
     ).then(
         (user)=>{
             if(user == null){
-                res.json(
+                res.status(404).json(
                     {
-                        "message": "User not found"
+                        "message": "Invalid email"
                     }
                 )
             } else{
@@ -81,20 +84,21 @@ export function loginUser(req,res){
                         phone: user.phone
                     }
 
-                    const token = jwt.sign(userData, "infuse123")
+                    const token = jwt.sign(userData, process.env.JWT_KEY)
 
                     res.json(
                         {
                             message: "Login Successful",
-                            token: token
+                            token: token,
+                            user : userData
                         }
                     )
 
 
                 } else{
-                    res.json(
+                    res.status(403).json(
                         {
-                            message: "Login Failed!..."
+                            message: "Invalid password"
                         }
                     )
                 }
