@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const LoginPage = () => {
@@ -27,6 +27,7 @@ const LoginPage = () => {
     // LogIn Button
 
     const handlLogin = (e) => {
+        toast.loading("Logging in...");
         e.preventDefault(); 
 
         console.log(email);
@@ -39,6 +40,7 @@ const LoginPage = () => {
         }).then(
             (response)=> {
                 console.log("Login Successful", response.data); 
+                toast.dismiss();
                 toast.success("Login Successful");
                 localStorage.setItem("token", response.data.token);
 
@@ -53,6 +55,7 @@ const LoginPage = () => {
             }).catch(
                 (error)=> {
                     console.log("Login Failed", error.response.data); 
+                    toast.dismiss();
                     toast.error(error.response.data.message || "Login Failed");
                 }
             )
@@ -61,32 +64,37 @@ const LoginPage = () => {
 
 
   return (
-    <div className='bg-[url(../public/bg-image_01.jpg)] h-screen w-full bg-cover bg-center flex items-center gap-100'>
-        <div className="w-[520px] h-9/10 bg-white/60 backdrop-blur-[10px] rounded-2xl outline-2 outline-gray-600 outline-offset-[-10px] flex flex-col items-center ml-50">
-            <h1 className='text-5xl text-black-800 font-boldr mt-15 drop-shadow-lg tracking-tighter'>Login</h1>
-            <p className='mt-4 text-[14px] text-gray-700 tracking-wide drop-shadow-sm italic'>Welcome to Opal Glow Comsmetics</p>
+    <div className='min-h-screen flex items-center justify-center'
+        style={{
+        backgroundImage: 'url(https://images.pexels.com/photos/3609620/pexels-photo-3609620.jpeg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+        {/* Semi-transparent overlay */}
+        <div className="absolute inset-0 bg-black opacity-10"></div>
 
-            <div className="flex flex-col gap-5 h-full mt-20 ">
-                <div className='flex flex-col justify-right'>
-                <label for="email" className='pr-4 text-sm text-gray-600 mb-2 font-medium px-3'>E-mail</label>
+        {/* Form container */}
+        <div className="relative bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-96 z-10">
+
+            <h1 className='text-4xl font-semibold text-gray-900 text-center'>LogIn</h1>
+            <p className='mt-4 text-[14px] text-gray-700 tracking-wide drop-shadow-sm text-center'>Welcome to Opal Glow Comsmetics</p>
+
+            <div className="flex flex-col gap-3 h-full mt-7 ">
                 <input 
-                type="text" 
-                placeholder='email' 
-                className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[400px] h-[40px]" 
-                id='email'
-                onChange={handleEmail}
-                value={email} />
-                </div>
-                    <div className='flex flex-col justify-right'>
-                        <label for="password" className='pr-4 text-sm text-gray-600 mb-2 font-medium px-3'>Password</label>
-                        <input 
-                        type="password" 
-                        placeholder='password' 
-                        className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[400px] h-[40px]" 
-                        id='password'
-                        onChange={handlePassword}
-                        value={password} />
-                    </div>
+                    type="text" 
+                    placeholder='email' 
+                    className="placeholder:text-gray-500 placeholder:text-xs pl-3 mt-2 border-1 border-gray-300 bg-white/80 rounded-md w-full h-[40px]" 
+                    id='email'
+                    onChange={handleEmail}
+                    value={email} />
+                    
+                <input 
+                    type="password" 
+                    placeholder='password' 
+                    className="placeholder:text-gray-500 placeholder:text-xs pl-3 mt-2 border-1 border-gray-300 bg-white/80 rounded-md w-full h-[40px]" 
+                    id='password'
+                    onChange={handlePassword}
+                    value={password} />
                 
                 <div className='flex justify-between text-xs'>
                     <div className='flex items-center gap-2'>
@@ -100,11 +108,18 @@ const LoginPage = () => {
                     <a href="#" className='text-gray-700'>Forget your password</a>
                 </div>
 
-                <button type='submit' onClick={handlLogin} className='bg-black rounded-md w-[400px] h-[40px] text-gray-200 font-semibold mt-8 hover:bg-white hover:text-black transition duration-300 drop-shadow-lg cursor-pointer'>Login</button>
+                <button type='submit' onClick={handlLogin} className='w-full bg-black py-2 rounded text-gray-200 font-semibold mt-8 hover:bg-gray-400 transition duration-300 drop-shadow-lg cursor-pointer'>Login</button>
+
+                <div className="flex justify-center items-center gap-2 text-gray-700 text-xs">
+                    <p>
+                        Don't have an account yet?
+                        <span className='text-blue-800 cursor-pointer'><Link to="/register"> Sign in!</Link></span>
+                    </p>
+                </div>
 
             </div>
         </div>
-        <img src="../public/opal-logo.png" alt="Logo" className='h-[80px] w-auto mt-10 drop-shadow-2xl absolute right-[80px] top-[10px]' />
+        {/* <img src="../public/opal-logo.png" alt="Logo" className='h-[80px] w-auto mt-10 drop-shadow-2xl absolute right-[80px] top-[10px]' /> */}
     </div>
   )
 }

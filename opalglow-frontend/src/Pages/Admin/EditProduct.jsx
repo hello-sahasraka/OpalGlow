@@ -34,8 +34,12 @@ const EditProduct = () => {
 
         try {
 
-        const result = await Promise.all(promiseArray)
-        
+        let result = await Promise.all(promiseArray)
+
+        if (result.length === 0) {
+            result = productData.image; // If no new images, keep the old ones
+        }
+
         const productDetails = {
 
             productId: productid,
@@ -50,20 +54,20 @@ const EditProduct = () => {
         }
 
         console.log(productDetails);
-        
-        await axios.post(import.meta.env.VITE_BACKEND_URL+"/api/product/createproduct", productDetails, {
+
+        await axios.put(import.meta.env.VITE_BACKEND_URL+"/api/product/updateproduct/"+productid, productDetails, {
             headers: {
                 "Authorization": "Bearer "+ localStorage.getItem("token")
             }
         })
         toast.dismiss();
-        toast.success("Product Added Successfully");
+        toast.success("Product Updated Successfully");
         navigate("/admin/products");
         
         } catch (error) {
             console.log(error);
             toast.dismiss();
-            toast.error("Product Adding Failed");
+            toast.error("Product Updating Failed");
         }
     }
 

@@ -7,6 +7,7 @@ import Products from "./Pages/Admin/Products"
 import AddProduct from "./Pages/Admin/AddProduct"
 import EditProduct from "./Pages/Admin/EditProduct"
 import MediaUpload from "../Uitils/MediaUpload"
+import Register from "./Pages/Register"
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <Toaster position="top-center" />
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/register" element={<Register />} />
 
         <Route path="/admin" element={<Adminpage />}>
           <Route path="users" element={<h1>User</h1>} />          {/* Default: /admin */}
