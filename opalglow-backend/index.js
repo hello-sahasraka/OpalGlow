@@ -22,8 +22,10 @@ mongoose.connect(process.env.MONGO_URL).then(
         console.log("Connected to the Database Successfully...");
     }
 ).catch(
-    ()=> {
+    (e)=> {
         console.log("Connection Fail!...");
+        console.log(e);
+        
     }
 );
 
