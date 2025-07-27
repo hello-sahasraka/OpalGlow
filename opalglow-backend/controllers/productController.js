@@ -61,6 +61,32 @@ export function getProduct(req, res){
     );
 }
 
+export async function getProductById(req, res){
+
+    const productId = req.params.productId;
+
+    try {
+            const product = await Product.findOne({productId : productId});
+
+            if(!product){
+                return res.status(404).json(
+                    {
+                        "message": "Product not found!"
+                    }
+                );
+            }
+
+            res.json(product);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json(
+                {
+                    "message": "Failed to get product!"
+                }
+            );
+        }
+}
+
 export function deleteProduct(req, res){
 
     if(req.user.role != "admin"){
