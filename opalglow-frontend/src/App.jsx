@@ -10,6 +10,8 @@ import MediaUpload from "../Uitils/MediaUpload"
 import Register from "./Pages/Client/Register"
 import Home from "./Pages/Home"
 import ProductsPage from "./Pages/Client/ProductsPage"
+import ProductOverview from "./Pages/Client/ProductOverview"
+import Cart from "./Pages/Client/Cart"
 
 function App() {
 
@@ -34,8 +36,10 @@ function App() {
 
         <Route path="/*" element={<Home />}>
           <Route path="products" element={<ProductsPage />} />
+          <Route path="products/:id" element={<ProductOverview />} />
           <Route path="reviews" element={<h1>Reviews</h1>} />
           <Route path="aboutus" element={<h1>About Us</h1>} />
+          <Route path="cart" element={<Cart />} />
           <Route path="*" element={<h1>404 Not found</h1>} />
         </Route>
 

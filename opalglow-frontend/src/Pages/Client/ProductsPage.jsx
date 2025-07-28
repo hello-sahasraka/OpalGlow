@@ -22,7 +22,7 @@ const ProductsPage = () => {
 
     return (
     <div className='w-full h-full px-[100px]'>
-        <div className="text-3xl font-bold text-gray-900 py-8">
+        <div className="text-3xl font-bold text-gray-900 py-12">
             Find Your Next <span className="text-rose-500">Favorite</span> Product
         </div>
         {
