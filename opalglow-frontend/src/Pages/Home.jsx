@@ -6,7 +6,7 @@ const Home = () => {
     <div>
       <Header />
 
-      <div className="w-full h-[calc(100vh-50px)]">
+      <div className="w-full h-[calc(100vh-60px)]">
         <Outlet />
       </div>
 
