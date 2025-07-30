@@ -2,7 +2,7 @@ import React from 'react'
 
 const Loader = () => {
   return (
-    <div className="w-full h-full bg-gray-50 flex flex-col justify-center items-center">
+    <div className="w-full h-full flex flex-col justify-center items-center">
       {/* Logo or Brand Name */}
       {/* <div className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
         OpalGlow

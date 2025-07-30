@@ -21,7 +21,7 @@ const ProductsPage = () => {
     }, [loading]);
 
     return (
-    <div className='w-full h-full px-[100px]'>
+    <div className='w-full h-full flex flex-col px-[100px]'>
         <div className="text-3xl font-bold text-gray-900 py-12">
             Find Your Next <span className="text-rose-500">Favorite</span> Product
         </div>
