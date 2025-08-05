@@ -12,42 +12,49 @@ import Home from "./Pages/Home"
 import ProductsPage from "./Pages/Client/ProductsPage"
 import ProductOverview from "./Pages/Client/ProductOverview"
 import Cart from "./Pages/Client/Cart"
+import PlaceOrder from "./Pages/Client/PlaceOrder"
+import AdminOrders from "./Pages/Admin/AdminOrders"
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 function App() {
 
   return (
-    <>
-    <BrowserRouter>
+    <GoogleOAuthProvider clientId="170780994031-8i19nui90rgeh3jbql9ga0pkh0b9es9s.apps.googleusercontent.com">
+      <BrowserRouter>
 
-      <Toaster position="top-center" />
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<Register />} />
-        
-        {/* Admin routes */}
-        <Route path="/admin" element={<Adminpage />}>
-          <Route path="users" element={<h1>User</h1>} />
-          <Route path="products" element={<Products />} />
-          <Route path="orders" element={<h1>Orders</h1>} />
-          <Route path="addproduct" element={<AddProduct />} />
-          <Route path="editproduct" element={<EditProduct />} />
-          <Route path="input" element={<MediaUpload />} />
-        </Route>
+        <Toaster position="top-center" />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route path="/*" element={<Home />}>
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="products/:id" element={<ProductOverview />} />
-          <Route path="reviews" element={<h1>Reviews</h1>} />
-          <Route path="aboutus" element={<h1>About Us</h1>} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="*" element={<h1>404 Not found</h1>} />
-        </Route>
+          {/* Admin routes */}
+          <Route path="/admin" element={<Adminpage />}>
+            <Route path="users" element={<h1>User</h1>} />
+            <Route path="products" element={<Products />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="addproduct" element={<AddProduct />} />
+            <Route path="editproduct" element={<EditProduct />} />
+            <Route path="input" element={<MediaUpload />} />
+          </Route>
 
-      </Routes>
+          {/* User routes */}
+          <Route path="/*" element={<Home />}>
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="products/:id" element={<ProductOverview />} />
+            <Route path="reviews" element={<h1>Reviews</h1>} />
+            <Route path="aboutus" element={<h1>About Us</h1>} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="placeorder" element={<PlaceOrder />} />
+            <Route path="*" element={<h1>404 Not found</h1>} />
+          </Route>
 
-    </BrowserRouter>
-  </>
+        </Routes>
+
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   )
 }
 
 export default App
+
+// 170780994031-8i19nui90rgeh3jbql9ga0pkh0b9es9s.apps.googleusercontent.com

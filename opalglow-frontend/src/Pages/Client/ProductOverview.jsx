@@ -39,6 +39,15 @@ const ProductOverview = () => {
             }
         }, [state]);
 
+    const byNow = () => {
+        const updatedProduct = { ...product, quantity };
+        updatedProduct.image = product.image[0];
+        const cartItems = [updatedProduct];
+        console.log(cartItems);
+        
+        navigate("/placeorder", { state: { cartItems } })
+    }
+
   return (
     <div className='w-full h-full'>
         {state === "loading" && <Loader />}
@@ -120,6 +129,7 @@ const ProductOverview = () => {
                                 ? 'bg-black text-white hover:bg-gray-800'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             } transition duration-300`}
+                            onClick={byNow}
                             >
                             {product.stock > 0 ? 'Buy Now' : 'Unavailable'}
                             </button>

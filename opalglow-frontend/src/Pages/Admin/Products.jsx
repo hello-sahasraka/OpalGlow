@@ -1,95 +1,146 @@
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { SquarePlus, Delete, PencilIcon, Loader, } from 'lucide-react';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { SquarePlus, Delete, PencilIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Loader from "../../Components/Loader";
 
 const Products = () => {
-const [products, setProducts] = useState([])
-const [loaded, setLoaded] = useState(false)
-const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const navigate = useNavigate();
 
-useEffect(
-    () => {
-        if(!loaded) {
-          axios.get(import.meta.env.VITE_BACKEND_URL+"/api/product/getproduct").then(
-            (response) => {
-                console.log("Products", response.data)
-                setProducts(response.data)
-                setLoaded(true)
-            }
-            )
-        }
-    }, [loaded]
-)
+  useEffect(() => {
+    if (!loaded) {
+      axios
+        .get(import.meta.env.VITE_BACKEND_URL + "/api/product/getproduct")
+        .then((response) => {
+          setProducts(response.data);
+          setLoaded(true);
+        });
+    }
+  }, [loaded]);
 
-const handleDelete = async (id) => {
-  
-  toast.loading("Deleting...")
+  const handleDelete = async (id) => {
+    toast.loading("Deleting...");
 
-  const token = localStorage.getItem("token")
-  if (token == null)  {
-    toast.dismiss()
-    toast.error("Please Login First")
-    return
-  }
-  
-    try {
-      await axios.delete(import.meta.env.VITE_BACKEND_URL+"/api/product/deleteproduct/"+id, {
-        headers: {
-          "Authorization": "Bearer "+ localStorage.getItem("token")
-      }
-      })
-      toast.dismiss()
-      toast.success("Product Deleted Successfully")
-      setLoaded(false)
-
-    } catch (error) {
-      console.log(error)
-      toast.dismiss()
-      toast.error("Product Deletion Failed")
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.dismiss();
+      toast.error("Please login first");
+      return;
     }
 
-}
-
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/product/deleteproduct/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.dismiss();
+      toast.success("Product deleted");
+      setLoaded(false);
+    } catch (error) {
+      console.error(error);
+      toast.dismiss();
+      toast.error("Failed to delete product");
+    }
+  };
 
   return (
-    <div className="h-full w-full flex justify-center items-start overflow-x-auto p-4 relative">
-      <Link to={"/admin/addproduct"} className="hover:text-gray-500 transition duration-200 absolute right-6 bottom-6">
-        <SquarePlus size={40} />
+    <div className="w-full min-h-screen bg-gray-50 px-12 py-10 relative">
+      {/* Floating Add Button */}
+      <Link
+        to="/admin/addproduct"
+        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition"
+        title="Add New Product"
+      >
+        <SquarePlus size={26} />
       </Link>
-      {loaded && <table className="w-5/6 text-left text-sm border-collapse">
-        <thead>
-          <tr className="border-b-2 border-gray-400 bg-gray-200 h-[60px] rounded-[50px]">
-            <th className="p-2 first:rounded-tl-xl">Product ID</th>
-            <th className="p-2">Name</th>
-            <th className="p-2">Price</th>
-            <th className="p-2">Description</th>
-            <th className="p-2">Stock</th>
-            <th className="p-2 last:rounded-tr-xl">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product._id} className="border-b-1 border-gray-400 hover:text-blue-700 transition duration-200 cursor-pointer h-[50px]">
-              <td className="p-2">{product.productId}</td>
-              <td className="p-2">{product.name}</td>
-              <td className="p-2">${product.price}</td>
-              <td className="p-2 w-[500px]">{product.description}</td>
-              <td className="p-2">{product.stock}</td>
-              <td className="p-2">
-                <div className="flex gap-2">
-                  <button className="text-blue-500 hover:text-blue-300 cursor-pointer" onClick={() => {navigate("/admin/editproduct", { state: { product } })}}><PencilIcon size={20} /></button>
-                  <button className="text-red-500 hover:text-red-300 cursor-pointer" onClick={() => {handleDelete(product.productId)}}><Delete size={20} /></button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>}
-      {!loaded && <Loader size={50} className="animate-spin mt-[300px]" />}
-</div>
-  )
-}
 
-export default Products
+      {/* Page Heading */}
+      <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+        Product Management
+      </h1>
+
+      {/* Table Container */}
+      <div className="overflow-x-auto font-semibold bg-white rounded-xl shadow border border-gray-200">
+        {loaded ? (
+          products.length > 0 ? (
+            <table className="min-w-full text-xs text-left">
+              <thead className="text-xs text-gray-500 uppercase bg-gray-100 rounded-t-lg">
+                <tr>
+                  <th className="px-5 py-4">Product ID</th>
+                  <th className="px-5 py-4">Name</th>
+                  <th className="px-5 py-4">Price</th>
+                  <th className="px-5 py-4">Description</th>
+                  <th className="px-5 py-4">Stock</th>
+                  <th className="px-5 py-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-500">
+                {products.map((product) => (
+                  <tr
+                    key={product._id}
+                    className="border-t hover:bg-gray-50 transition"
+                  >
+                    <td className="px-5 py-4">{product.productId}</td>
+                    <td className="px-5 py-4 font-medium">{product.name}</td>
+                    <td className="px-5 py-4 text-green-600">
+                      ${product.price}
+                    </td>
+                    <td className="px-5 py-4 max-w-sm truncate text-gray-600">
+                      {product.description}
+                    </td>
+                    <td className="px-5 py-4">{product.stock}</td>
+                    <td className="px-5 py-4">
+                      <div className="flex justify-center gap-2">
+                        <button
+                          onClick={() =>
+                            navigate("/admin/editproduct", {
+                              state: { product },
+                            })
+                          }
+                          title="Edit Product"
+                          className="text-blue-600 hover:text-blue-800 transition"
+                        >
+                          <PencilIcon size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(product.productId)}
+                          title="Delete Product"
+                          className="text-red-500 hover:text-red-700 transition"
+                        >
+                          <Delete size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="text-center text-gray-500 py-20">
+              <p className="text-lg mb-4">No products found</p>
+              <Link
+                to="/admin/addproduct"
+                className="text-blue-600 hover:underline text-sm"
+              >
+                Click here to add your first product
+              </Link>
+            </div>
+          )
+        ) : (
+          <div className="flex justify-center items-center h-[300px]">
+            <Loader />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Products;

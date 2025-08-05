@@ -52,7 +52,7 @@ const Cart = () => {
                         )}
 
                         <div className='w-full lg:w-1/3 h-auto lg:h-[350px] rounded-xl border border-gray-300 flex flex-col gap-4 p-6 sticky top-[100px]'>
-                            <h1 className='text-2xl sm:text-3xl font-bold text-gray-900'>Order Summary</h1>
+                            <h1 className='text-xl sm:text-3xl font-semibold text-gray-900'>Order Summary</h1>
                             <div className='flex flex-col gap-2 border-b border-gray-300 py-2'>
                                 <div className='flex justify-between'>
                                     <span className='text-gray-700'>Total Items:</span>
@@ -60,7 +60,7 @@ const Cart = () => {
                                 </div>
                                 <div className='flex justify-between'>
                                     <span className='text-gray-700'>Sub Total:</span>
-                                    <span className='font-semibold'>
+                                    <span className='text-lg font-semibold'>
                                         ${cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}
                                     </span>
                                 </div>
@@ -76,9 +76,9 @@ const Cart = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-2'>
-                                <div className='flex justify-between text-lg'>
-                                    <span className='text-gray-700 font-semibold'>Total:</span>
-                                    <span className='font-semibold'>
+                                <div className='flex justify-between'>
+                                    <span className='text-gray-700 font-semibold text-lg'>Total:</span>
+                                    <span className='text-xl font-semibold text-green-600'>
                                         $
                                         {(
                                             cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
@@ -87,7 +87,8 @@ const Cart = () => {
                                         ).toFixed(2)}
                                     </span>
                                 </div>
-                                <button className='mt-2 py-3 w-full text-center rounded-md font-semibold text-sm transition duration-300 bg-black text-white hover:bg-gray-800 cursor-pointer'>
+                                <button className='mt-2 py-3 w-full text-center rounded-md font-semibold text-sm transition duration-300 bg-black text-white hover:bg-gray-800 cursor-pointer'
+                                        onClick={() => navigate("/placeorder", { state: { cartItems } })}>
                                     Checkout
                                 </button>
                             </div>

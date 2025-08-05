@@ -1,8 +1,15 @@
 import React from 'react';
 import getCart, { removeFromCart } from '../../Uitils/Cart';
+import { useNavigate } from 'react-router-dom';
 
 const CartCard = ({ item, onRemove }) => {
     const { name, image, price, labeledPrice, altNames, id, quantity } = item;
+    const navigate = useNavigate();
+
+    const buyNow = () => {
+        const cartItems = [item];
+        navigate("/placeorder", { state: { cartItems } })
+    }
 
     return (
         <div className='w-full py-3 px-1 border-b border-b-gray-300 flex flex-col sm:flex-row gap-4 sm:gap-6 rounded-md'>
@@ -26,7 +33,10 @@ const CartCard = ({ item, onRemove }) => {
 
                 {/* Action Buttons */}
                 <div className='w-full lg:w-2/3 flex flex-col sm:flex-row gap-3 mt-2'>
-                    <button className='py-2 w-full text-center rounded-md font-semibold text-sm bg-black text-white hover:bg-gray-800 transition cursor-pointer'>
+                    <button 
+                        className='py-2 w-full text-center rounded-md font-semibold text-sm bg-black text-white hover:bg-gray-800 transition cursor-pointer'
+                        onClick={buyNow}
+                        >
                         Buy
                     </button>
                     <button
