@@ -142,7 +142,7 @@ const Register = () => {
           <p>
             Already have an account?
             <span className="text-blue-800 cursor-pointer">
-              <Link to="/"> Log in!</Link>
+              <Link to="/login"> Log in!</Link>
             </span>
           </p>
         </div>
