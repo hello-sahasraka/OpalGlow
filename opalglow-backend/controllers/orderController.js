@@ -39,27 +39,25 @@ export async function createOrder(req, res) {
 
       for (let i = 0; i < body.billItems.length; i++) {
         const product = await Product.findOne({
-          productId: body.billItems[i].productId,
+          productId: body.billItems[i].id,
         });
 
         if (product == null) {
           res.status(404).json({
             message:
-              "Product with product id " +
-              body.billItems[i].productId +
-              " not found",
+              "Product with product id " + body.billItems[i].id + " not found",
           });
           return;
-
         } else {
           orderData.billItems[i] = {
-            productId: product.productId,
+            productId: product.id,
             productName: product.name,
             image: product.image[0],
             quantity: body.billItems[i].quantity,
             price: product.price,
           };
-          orderData.total = orderData.total + (product.price * body.billItems[i].quantity);
+          orderData.total =
+            orderData.total + product.price * body.billItems[i].quantity;
         }
       }
 
@@ -117,5 +115,34 @@ export function getOrders(req, res) {
           message: "Orders not found",
         });
       });
+  }
+}
+
+export async function updateOrder(req, res) {
+  try {
+    if (req.user == null) {
+      res.status(404).json({
+        message: "Unauthorized!",
+      });
+      return;
+    }
+
+    if (req.user.role != "admin") {
+      res.status(404).json({
+        message: "You are not authorized to update an order!",
+      });
+    }
+
+    const orderID = req.params.orderId;
+    const order = await Order.findOneAndUpdate({ orderId: orderID }, req.body);
+
+    res.json({
+      message: "Order updated successfully!",
+    })
+
+  } catch (err) {
+    res.status(500).json({
+      message: "Order not updated!",
+    });
   }
 }
