@@ -1,15 +1,17 @@
 import axios from 'axios';
-import { useState } from 'react'
+import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import MediaUpload from '../../../Uitils/MediaUpload';
 
 const EditProduct = () => {
     const locationData = useLocation();
     const navigate = useNavigate();
-    if (locationData.state === null) {
-        window.location.href = "/admin/products";  
+
+    if (!locationData.state) {
+        window.location.href = "/admin/products";
     }
+
     const productData = locationData.state.product;
 
     const [productid, setProductid] = useState(productData.productId);
@@ -21,153 +23,146 @@ const EditProduct = () => {
     const [description, setDescription] = useState(productData.description);
     const [image, setImage] = useState([]);
 
-
-    const  handleSubmit = async () => {
-
+    const handleSubmit = async () => {
         const promiseArray = [];
         for (let i = 0; i < image.length; i++) {
-            const spromise = MediaUpload(image[i]);
-            promiseArray[i] = spromise;
+            promiseArray[i] = MediaUpload(image[i]);
         }
 
-        toast.loading("Uploading...");
+        toast.loading('Uploading...');
 
         try {
+            let result = await Promise.all(promiseArray);
 
-        let result = await Promise.all(promiseArray)
-
-        if (result.length === 0) {
-            result = productData.image; // If no new images, keep the old ones
-        }
-
-        const productDetails = {
-
-            productId: productid,
-            name: productName,
-            altNames: altNames,
-            price: price,
-            labeledPrice: labeledPrice,
-            description: description,
-            image: result,
-            stock: stock
-            
-        }
-
-        console.log(productDetails);
-
-        await axios.put(import.meta.env.VITE_BACKEND_URL+"/api/product/updateproduct/"+productid, productDetails, {
-            headers: {
-                "Authorization": "Bearer "+ localStorage.getItem("token")
+            if (result.length === 0) {
+                result = productData.image; // Keep old images if no new ones
             }
-        })
-        toast.dismiss();
-        toast.success("Product Updated Successfully");
-        navigate("/admin/products");
-        
-        } catch (error) {
-            console.log(error);
+
+            const productDetails = {
+                productId: productid,
+                name: productName,
+                altNames: altNames,
+                price: price,
+                labeledPrice: labeledPrice,
+                description: description,
+                image: result,
+                stock: stock,
+            };
+
+            await axios.put(
+                `${import.meta.env.VITE_BACKEND_URL}/api/product/updateproduct/${productid}`,
+                productDetails,
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token'),
+                    },
+                }
+            );
+
             toast.dismiss();
-            toast.error("Product Updating Failed");
+            toast.success('Product Updated Successfully');
+            navigate('/admin/products');
+        } catch (error) {
+            console.error(error);
+            toast.dismiss();
+            toast.error('Product Updating Failed');
         }
-    }
+    };
 
+    return (
+        <div className="w-full h-full bg-gray-50 px-12 py-10">
+            <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+                Edit Product
+            </h1>
+            <Toaster />
 
-  return (
-    <div className='h-full w-full flex justify-center items-start overflow-x-auto p-4'>
-        <Toaster />
-        <div className='flex flex-col gap-[15px] items-center w-5/6 h-full bg-gray-300 shadow-md rounded-2xl py-[20px]'>
-            <h1 className='text-2xl font-bold text-gray-700'>Edit Product</h1>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="productid" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Product ID</label> */}
-                    <input 
-                    type="text" 
-                    disabled    
-                    placeholder='Product ID' 
-                    value={productid}
-                    onChange={(e) => setProductid(e.target.value)}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]" 
-                    id='productid'/>
-                </div>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="name" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Product Name</label> */}
-                    <input 
-                    type="text" 
-                    placeholder='Product Name'
-                    value={productName}
-                    onChange={(e) => setproductName(e.target.value)}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]" 
-                    id='name'/>
-                </div>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="altname" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Alternative Names</label> */}
-                    <input 
-                    type="text" 
-                    placeholder='Alternative Names'
-                    value={altNames}
-                    onChange={(e) => {
-                        setAltNames(e.target.value.split(','));
-                    }}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]" 
-                    id='altname'/>
-                </div>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="price" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Alternative Names</label> */}
-                    <input 
-                    type="number" 
-                    placeholder='Price' 
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]" 
-                    id='price'/>
-                </div>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="lprice" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Labeled Price/label> */}
-                    <input 
-                    type="number" 
-                    placeholder='Labeled Price' 
-                    value={labeledPrice}
-                    onChange={(e) => setLabeledPrice(e.target.value)}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]" 
-                    id='lprice'/>
-                </div>
-                <div>
+            <div className="overflow-x-auto w-full font-semibold bg-white rounded-xl shadow border border-gray-200 py-12 px-16 mx-auto">
+                <div className="space-y-4">
                     <input
-                    type="file"
-                    multiple
-                    onChange={(e) => setImage(e.target.files)}
-                    placeholder='Image'
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]"
+                        type="text"
+                        placeholder="Product ID"
+                        value={productid}
+                        disabled
+                        onChange={(e) => setProductid(e.target.value)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed placeholder:text-gray-400 focus:outline-none"
                     />
-                </div>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="stock" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Stock</label> */}
-                    <input 
-                    type="number" 
-                    placeholder='Stock' 
-                    value={stock}
-                    onChange={(e) => setStock(e.target.value)}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs pl-3 bg-white/80 rounded-md w-[550px] h-[42px]" 
-                    id='stock'/>
-                </div>
-                <div className='flex flex-col justify-right'>
-                    {/* <label for="description" className='pr-4 text-sm text-gray-600 mb-2 font-medium'>Description</label> */}
-                    <textarea 
-                    type="text" 
-                    placeholder='Description...' 
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="placeholder:text-gray-500 placeholder:italic placeholder:text-xs placeholder:py-3 pl-3 bg-white/80 rounded-md w-[550px] h-[120px]" 
-                    id='description'/>
-                </div>
-                <div className='flex justify-between items-center w-[550px] py-2'>
-                    <Link to={"/admin/products"} className='bg-red-700 hover:bg-red-600 transition duration-200 text-white rounded-md px-[75px] py-2 cursor-pointer'>Cancel</Link>
-                    <button className='bg-green-700 hover:bg-green-600 transition duration-200 text-white rounded-md px-[75px] py-2 cursor-pointer'
-                    onClick={handleSubmit}>Submit</button>
-                </div>
-                
-        </div>
-    </div>
-  )
-}
 
-export default EditProduct
+                    <div className='flex gap-4'>
+                        <input
+                            type="text"
+                            placeholder="Product Name"
+                            value={productName}
+                            onChange={(e) => setproductName(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+
+                        <input
+                            type="text"
+                            placeholder="Alternative Names (comma separated)"
+                            value={altNames}
+                            onChange={(e) => setAltNames(e.target.value.split(','))}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div className='flex gap-4'>
+                        <input
+                            type="number"
+                            placeholder="Price"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+
+                        <input
+                            type="number"
+                            placeholder="Labeled Price"
+                            value={labeledPrice}
+                            onChange={(e) => setLabeledPrice(e.target.value)}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <input
+                        type="file"
+                        multiple
+                        onChange={(e) => setImage(e.target.files)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 focus:outline-none"
+                    />
+
+                    <input
+                        type="number"
+                        placeholder="Stock"
+                        value={stock}
+                        onChange={(e) => setStock(e.target.value)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+
+                    <textarea
+                        placeholder="Description..."
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 h-28"
+                    ></textarea>
+                </div>
+
+                <div className="flex justify-between items-center mt-6">
+                    <Link
+                        to="/admin/products"
+                        className="border-red-600 border bg-red-100 text-red-600 hover:bg-red-700 hover:text-white px-10 py-2 rounded-md transition"
+                    >
+                        Cancel
+                    </Link>
+                    <button
+                        onClick={handleSubmit}
+                        className="border-blue-600 border bg-blue-100 text-blue-600 hover:bg-blue-700 hover:text-white px-10 py-2 rounded-md transition"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default EditProduct;

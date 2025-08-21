@@ -5,10 +5,14 @@ import getCart, { removeFromCart } from '../../../Uitils/Cart';
 import emptyCartImage from './../../assets/empty_cart.png';
 import { useNavigate } from 'react-router-dom';
 
+import { useConfirmDialog } from '../../Components/ConfirmDialogProvider';
+
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    const confirmDialog = useConfirmDialog();
 
     let delivery = 0;
     if (cartItems.length > 0) delivery = 12.99;
@@ -19,8 +23,10 @@ const Cart = () => {
     }, []);
 
     const handleRemove = (id) => {
-        const updatedCart = removeFromCart({ id });
-        setCartItems(updatedCart);
+        confirmDialog("Are you sure you want to remove this product?", () => {
+            const updatedCart = removeFromCart({ id });
+            setCartItems(updatedCart);
+        });
     };
 
     return (

@@ -1,14 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SquarePlus, Delete, PencilIcon } from "lucide-react";
+import { SquarePlus, Delete, PencilIcon, X, FilePenLine } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Loader from "../../Components/Loader";
+import { useConfirmDialog } from "../../Components/ConfirmDialogProvider";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const navigate = useNavigate();
+
+  const confirmDialog = useConfirmDialog();
 
   useEffect(() => {
     if (!loaded) {
@@ -21,33 +24,37 @@ const Products = () => {
     }
   }, [loaded]);
 
-  const handleDelete = async (id) => {
-    toast.loading("Deleting...");
+  const handleDelete = (id) => {
+    confirmDialog("Are you sure you want to delete this product?", async () => {
+      toast.loading("Deleting...");
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.dismiss();
-      toast.error("Please login first");
-      return;
-    }
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.dismiss();
+        toast.error("Please login first");
+        return;
+      }
 
-    try {
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/api/product/deleteproduct/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.dismiss();
-      toast.success("Product deleted");
-      setLoaded(false);
-    } catch (error) {
-      console.error(error);
-      toast.dismiss();
-      toast.error("Failed to delete product");
-    }
+      try {
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/api/product/deleteproduct/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        toast.dismiss();
+        toast.success("Product deleted");
+        setLoaded(false);
+      } catch (error) {
+        console.error(error);
+        toast.dismiss();
+        toast.error("Failed to delete product");
+      }
+
+    });
+
   };
 
   return (
@@ -55,7 +62,7 @@ const Products = () => {
       {/* Floating Add Button */}
       <Link
         to="/admin/addproduct"
-        className="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition"
+        className="fixed bottom-6 right-6 bg-blue-600  hover:scale-115 text-white p-3 rounded-full shadow-lg transition"
         title="Add New Product"
       >
         <SquarePlus size={26} />
@@ -105,16 +112,16 @@ const Products = () => {
                             })
                           }
                           title="Edit Product"
-                          className="text-blue-600 hover:text-blue-800 transition"
+                          className="text-blue-600 border border-blue-600 bg-blue-100 rounded-full p-1 hover:text-blue-800 transition cursor-pointer"
                         >
-                          <PencilIcon size={18} />
+                          <FilePenLine size={18} />
                         </button>
                         <button
                           onClick={() => handleDelete(product.productId)}
                           title="Delete Product"
-                          className="text-red-500 hover:text-red-700 transition"
+                          className="text-red-600 border border-red-600 bg-red-100 rounded-full p-1 hover:text-red-700 transition cursor-pointer"
                         >
-                          <Delete size={18} />
+                          <X size={18} />
                         </button>
                       </div>
                     </td>

@@ -1,19 +1,36 @@
-import { Link } from "react-router-dom"
-import { ShoppingCart } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { ShoppingCart, Menu } from 'lucide-react';
 import getCart from "../../Uitils/Cart";
 import { useEffect, useState } from "react";
+import UserData from "./UserData";
 
 const Header = () => {
-  const [itemAmount, setItemAmount] = useState();
-  const cartItems = getCart();
+  const [itemAmount, setItemAmount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const updateCartCount = () => {
+    const cartItems = getCart();
+    setItemAmount(cartItems.length);
+  };
 
   useEffect(() => {
-    setItemAmount(cartItems.length);
-  },[cartItems])
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
+    return () => window.removeEventListener("storage", updateCartCount);
+  }, []);
 
   return (
-    <div className='sticky top-0 w-full h-[60px] bg-gray-800/25 backdrop-blur-md text-rose-900 font-semibold flex justify-end shadow z-10'>
-        <div className="flex justify-between items-center w-[25%] h-full mx-[100px]">
+    <div className="sticky top-0 w-full h-[60px] bg-gray-800/25 backdrop-blur-md text-rose-900 font-semibold flex justify-between items-center px-4 sm:px-8 lg:px-[100px] shadow z-10">
+      {/* Mobile Menu Toggle */}
+      <div className="lg:hidden">
+        <button onClick={() => setMenuOpen(!menuOpen)}>
+          <Menu size={28} />
+        </button>
+      </div>
+
+      {/* Desktop Navigation */}
+      <div className="hidden lg:flex justify-between items-center w-full h-full">
+        <div className="flex justify-between items-center w-[30%] h-full">
           <Link to="/">Home</Link>
           <Link to="/products">Products</Link>
           <Link to="/reviews">Reviews</Link>
@@ -25,8 +42,36 @@ const Header = () => {
             </span>
           </Link>
         </div>
-    </div>
-  )
-}
+        <UserData />
+      </div>
 
-export default Header
+      {/* Mobile Dropdown Menu */}
+      {menuOpen && (
+        <div className="absolute top-[60px] left-0 w-full bg-white border-t border-gray-200 shadow-lg lg:hidden z-50">
+          <div className="flex flex-col text-gray-800 font-medium py-4 px-6 space-y-4">
+            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link to="/products" onClick={() => setMenuOpen(false)}>Products</Link>
+            <Link to="/reviews" onClick={() => setMenuOpen(false)}>Reviews</Link>
+            <Link to="/aboutus" onClick={() => setMenuOpen(false)}>About Us</Link>
+            <Link to="/cart" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+              <ShoppingCart size={20} />
+              <span className="relative">
+                Cart
+                <span className="absolute -top-2 -right-3 bg-rose-600 text-white text-xs font-bold px-1 rounded-full">
+                  {itemAmount}
+                </span>
+              </span>
+            </Link>
+
+            {/* User Data Section for Mobile */}
+            <div className="border-t border-gray-200 pt-4">
+              <UserData />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Header;
