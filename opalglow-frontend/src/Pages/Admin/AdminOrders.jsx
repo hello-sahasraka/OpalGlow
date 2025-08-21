@@ -96,28 +96,6 @@ const AdminOrders = () => {
                     <td className="px-5 py-4 max-w-sm truncate">{order.address}</td>
                     <td className="px-5 py-4 text-red-600">${order.total.toFixed(2)}</td>
                     <td className="px-5 py-4">{new Date(order.date).toDateString()}</td>
-                    {/* <td className="px-5 py-4">
-                    <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() =>
-                          navigate("/admin/editproduct", {
-                            state: { product },
-                          })
-                        }
-                        title="Edit Product"
-                        className="text-blue-600 hover:text-blue-800 transition"
-                      >
-                        <PencilIcon size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(product.productId)}
-                        title="Delete Product"
-                        className="text-red-500 hover:text-red-700 transition"
-                      >
-                        <Delete size={18} />
-                      </button>
-                    </div>
-                  </td> */}
                   </tr>
                 ))}
               </tbody>
