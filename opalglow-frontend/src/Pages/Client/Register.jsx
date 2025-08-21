@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { Eye, EyeClosed } from 'lucide-react';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -14,6 +15,9 @@ const Register = () => {
     role: 'user',
     phone: ''
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData(prev => ({
@@ -41,7 +45,7 @@ const Register = () => {
     delete payload.confirmPassword;
 
     try {
-      await axios.post(import.meta.env.VITE_BACKEND_URL+'/api/user/', payload);
+      await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/user/', payload);
       toast.success("Registration successful!");
       navigate('/');
     } catch (error) {
@@ -99,25 +103,45 @@ const Register = () => {
           required
         />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="placeholder:text-gray-500 placeholder:text-xs pl-3 mt-3 border-1 border-gray-300 bg-white/80 rounded-md w-full h-[40px]"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <div className='relative flex items-center mt-3'>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            className="placeholder:text-gray-500 placeholder:text-xs pl-3 border-1 border-gray-300 bg-white/80 rounded-md w-full h-[40px]"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          className="placeholder:text-gray-500 placeholder:text-xs pl-3 mt-3 border-1 border-gray-300 bg-white/80 rounded-md w-full h-[40px]"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-        />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 cursor-pointer"
+          >
+            {showPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
+          </button>
+        </div>
+
+        <div className='relative flex items-center mt-3'>
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            className="placeholder:text-gray-500 placeholder:text-xs pl-3 border-1 border-gray-300 bg-white/80 rounded-md w-full h-[40px]"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 cursor-pointer"
+          >
+            {showConfirmPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
+          </button>
+        </div>
 
         {/* Hidden role input */}
         <input type="hidden" name="role" value={formData.role} />
