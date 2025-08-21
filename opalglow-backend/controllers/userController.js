@@ -3,7 +3,20 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import axios from "axios";
+import nodemailer from "nodemailer";
+import Otp from "../models/otp.js";
 dotenv.config();
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 export function saveUser(req, res) {
   if (req.body.role == "admin") {
@@ -31,6 +44,7 @@ export function saveUser(req, res) {
     secondName: req.body.secondName,
     password: hashedPassword,
     role: req.body.role,
+    phone: req.body.phone,
   });
 
   user
@@ -155,4 +169,192 @@ export async function googleLogin(req, res) {
   } catch (err) {
     console.log(err);
   }
+}
+
+export function validateUser(req, res) {
+  if (!req.user) {
+    res.status(404).json({
+      message: "please login!",
+    });
+    return;
+  }
+
+  res.json({
+    user: req.user,
+  });
+}
+
+export function getUsers(req, res) {
+  if (!req.user) {
+    res.status(401).json({
+      message: "Unauthorized",
+    });
+    return;
+  }
+
+  if (req.user.role == "admin") {
+    User.find()
+      .then((users) => {
+        res.json(users);
+      })
+      .catch(() => {
+        res.status(500).json({
+          message: "Users not found",
+        });
+      });
+  } else {
+    res.status(403).json({ message: "Forbidden" });
+  }
+}
+
+export function deleteUser(req, res) {
+  if (req.user.role != "admin") {
+    res.status(403).json({
+      message: "You are not authorized to delete a product!",
+    });
+
+    return;
+  }
+
+  User.findOneAndDelete({
+    email: req.params.email,
+  })
+    .then(() => {
+      res.json({
+        message: "Product deleted successfully!",
+      });
+    })
+    .catch(() => {
+      () => {
+        res.status(500).json({
+          message: "Failed to delete product!",
+        });
+      };
+    });
+}
+
+export function getCurrentUser(req, res) {
+  if (req.user == null) {
+    res.status(403).json({
+      message: "Please login to get user details",
+    });
+    return;
+  }
+  res.json({
+    user: req.user,
+  });
+}
+
+export function sendOtp(req, res) {
+  try {
+    const email = req.body.email;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required",
+      });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    const newOtp = new Otp({
+      email: email,
+      otp: otp
+    });
+
+    Otp.findOneAndUpdate(
+      {email:email},
+      { 
+        otp: otp,
+        createdAt: new Date()
+      },
+      { new: true, upsert: true }
+    ).then(() => {
+      console.log("OTP saved successfully");
+    }).catch((error) => {
+      console.error("Error saving OTP:", error.message);
+    });
+
+    // newOtp.save().then(() => {
+    //   console.log("OTP saved successfully");
+    // }).catch((error) => {
+    //   console.error("Error saving OTP:", error.message);
+    // });
+
+    const message = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your OTP Code for Verification.",
+      text: `Your OTP code is ${otp}. It will expire in 2 minutes.`,
+    };
+
+    transporter.sendMail(message, (error, info) => {
+      if (error) {
+        console.error("Error sending OTP:", error.message);
+        return res.status(500).json({
+          message: "Failed to send OTP",
+          error: error.message,
+        });
+      }
+
+      console.log(`OTP sent to ${email}: ${otp}`);
+
+      return res.status(200).json({
+        message: "OTP sent successfully"
+      });
+    });
+
+  } catch (err) {
+    console.error("Unexpected error in sendOtp:", err.message);
+    return res.status(500).json({
+      message: "Server error while sending OTP",
+      error: err.message,
+    });
+  }
+}
+
+export function changePassword(req, res) {
+  const email = req.body.email;
+  const password = req.body.newPassword;
+  const otp = req.body.otp;
+
+  if (!email || !password || !otp) {
+    return res.status(400).json({
+      message: "Email, password, and OTP are required",
+    });
+  }
+
+  Otp.findOne({ email: email, otp: otp })
+    .then((otpRecord) => {
+      if (!otpRecord) {
+        return res.status(400).json({
+          message: "Invalid OTP",
+        });
+      }
+
+      const hashedPassword = bcrypt.hashSync(password, 10);
+
+      // If OTP is valid, update the user's password
+      User.findOneAndUpdate(
+        { email: email },
+        { password: hashedPassword },
+        { new: true }
+      )
+        .then(() => {
+          Otp.deleteMany({ email: email });
+          res.json({
+            message: "Password changed successfully",
+          });
+        })
+        .catch(() => {
+          res.status(500).json({
+            message: "Failed to change password",
+          });
+        });
+    })
+    .catch(() => {
+      res.status(500).json({
+        message: "Failed to verify OTP",
+      });
+    });
 }
