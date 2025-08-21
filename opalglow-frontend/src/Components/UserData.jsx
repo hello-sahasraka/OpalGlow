@@ -28,13 +28,13 @@ const UserData = () => {
         <div>
             {!user ?
                 <div className="w-full h-full flex justify-center items-center gap-4">
-                    <Link to="/login" className="bg-rose-600 text-white rounded-2xl px-3 py-1 hover:bg-rose-700">Login</Link>
-                    <Link to="/register" className="bg-rose-600 text-white rounded-2xl px-3 py-1 hover:bg-rose-700">Register</Link>
+                    <Link to="/login" className="bg-rose-600 text-white rounded-2xl px-4 py-2 hover:bg-rose-700 transition-all duration-200 text-md">Login</Link>
+                    <Link to="/register" className="bg-rose-600 text-white rounded-2xl px-4 py-2 hover:bg-rose-700 transition-all duration-200 shadow-md text-md">Register</Link>
                 </div>
                 :
                 <div className="h-full flex justify-center items-center">
                     <button
-                        className="bg-rose-600 text-white rounded-2xl px-3 py-1 hover:bg-rose-700"
+                        className="bg-rose-600 text-white rounded-full px-4 py-2 hover:bg-rose-800 transition-all duration-200 shadow-md text-md"
                         onClick={() => {
                             setUser(null);
                             localStorage.removeItem("token");

@@ -1,12 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ShoppingCart, Menu } from 'lucide-react';
 import getCart from "../../Uitils/Cart";
 import { useEffect, useState } from "react";
 import UserData from "./UserData";
+import opalglow from "../assets/opalglow.png";
 
 const Header = () => {
   const [itemAmount, setItemAmount] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
 
   const updateCartCount = () => {
     const cartItems = getCart();
@@ -19,8 +21,15 @@ const Header = () => {
     return () => window.removeEventListener("storage", updateCartCount);
   }, []);
 
+  const navLinks = [
+    { path: "/", label: "Home" },
+    { path: "/products", label: "Products" },
+    { path: "/reviews", label: "Reviews" },
+    { path: "/aboutus", label: "AboutUs" },
+  ];
+
   return (
-    <div className="sticky top-0 w-full h-[60px] bg-gray-800/25 backdrop-blur-md text-rose-900 font-semibold flex justify-between items-center px-4 sm:px-8 lg:px-[100px] shadow z-10">
+    <div className="sticky top-0 w-full h-[60px] bg-rose-300/25 backdrop-blur-lg text-rose-900 font-semibold flex justify-between items-center px-4 sm:px-8 lg:px-20 shadow z-10">
       {/* Mobile Menu Toggle */}
       <div className="lg:hidden">
         <button onClick={() => setMenuOpen(!menuOpen)}>
@@ -30,12 +39,26 @@ const Header = () => {
 
       {/* Desktop Navigation */}
       <div className="hidden lg:flex justify-between items-center w-full h-full">
-        <div className="flex justify-between items-center w-[30%] h-full">
-          <Link to="/">Home</Link>
+        <img src={opalglow} alt="OpalGlow Logo" className="h-8" />
+        <div className="flex justify-between items-center w-[35%] h-full">
+          {
+            navLinks.map(({ path, label }) => {
+              const isActive = location.pathname === path;
+              return (
+                <Link
+                  key={path}
+                  to={path}
+                  className={`flex items-center gap-3 px-4 py-2 rounded-full transition-all duration-200 text-sm text-rose-900 font-medium
+                ${isActive ? "bg-rose-600 text-white shadow-md" : "hover:bg-rose-800 text-gray-300 hover:text-white"}`}>{label}</Link>
+              )
+            })
+          }
+          {/* <Link to="/">Home</Link>
           <Link to="/products">Products</Link>
           <Link to="/reviews">Reviews</Link>
-          <Link to="/aboutus">About Us</Link>
-          <Link to="/cart" className="relative">
+          <Link to="/aboutus">About Us</Link> */}
+          <Link
+            to="/cart" className={`relative ${location.pathname === "/cart" && "text-rose-600 scale-105"}`}>
             <ShoppingCart size={25} />
             <span className="absolute -top-1 -right-1 bg-white border border-rose-600 text-rose-600 text-xs font-semibold px-1 rounded-full">
               {itemAmount}
