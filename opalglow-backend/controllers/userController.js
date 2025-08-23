@@ -78,6 +78,7 @@ export function loginUser(req, res) {
       if (isPasswordCorrect) {
         const userData = {
           email: user.email,
+          _id: user._id,
           firstName: user.firstName,
           secondName: user.secondName,
           role: user.role,
@@ -122,20 +123,23 @@ export async function googleLogin(req, res) {
       const user = new User({
         email: response.data.email,
         firstName: response.data.given_name,
-        secondName: response.data.family_name,
+        secondName: response.data.family_name || "Not given",
         password: accessToken,
       });
 
       user
         .save()
-        .then(() => {
+        .then((savedUser) => {
           const userData = {
-            mail: response.data.email,
-            firstName: response.data.given_name,
-            secondName: response.data.family_name,
-            role: "user",
-            phone: "Not given",
+            email: savedUser.email,
+            _id: savedUser._id,
+            firstName: savedUser.firstName,
+            secondName: savedUser.secondName,
+            role: savedUser.role,
+            phone: savedUser.phone,
           };
+
+          console.log(savedUser);
 
           const token = jwt.sign(userData, process.env.JWT_KEY);
           res.json({
@@ -152,6 +156,7 @@ export async function googleLogin(req, res) {
     } else {
       const userData = {
         email: user.email,
+        _id: user._id,
         firstName: user.firstName,
         secondName: user.secondName,
         role: user.role,
@@ -259,27 +264,23 @@ export function sendOtp(req, res) {
 
     const newOtp = new Otp({
       email: email,
-      otp: otp
+      otp: otp,
     });
 
     Otp.findOneAndUpdate(
-      {email:email},
-      { 
+      { email: email },
+      {
         otp: otp,
-        createdAt: new Date()
+        createdAt: new Date(),
       },
       { new: true, upsert: true }
-    ).then(() => {
-      console.log("OTP saved successfully");
-    }).catch((error) => {
-      console.error("Error saving OTP:", error.message);
-    });
-
-    // newOtp.save().then(() => {
-    //   console.log("OTP saved successfully");
-    // }).catch((error) => {
-    //   console.error("Error saving OTP:", error.message);
-    // });
+    )
+      .then(() => {
+        console.log("OTP saved successfully");
+      })
+      .catch((error) => {
+        console.error("Error saving OTP:", error.message);
+      });
 
     const message = {
       from: process.env.EMAIL_USER,
@@ -300,10 +301,9 @@ export function sendOtp(req, res) {
       console.log(`OTP sent to ${email}: ${otp}`);
 
       return res.status(200).json({
-        message: "OTP sent successfully"
+        message: "OTP sent successfully",
       });
     });
-
   } catch (err) {
     console.error("Unexpected error in sendOtp:", err.message);
     return res.status(500).json({

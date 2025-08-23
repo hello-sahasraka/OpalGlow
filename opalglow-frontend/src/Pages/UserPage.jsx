@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router-dom'
 import Header from '../Components/Header'
+import Footer from '../Components/Footer';
 
-const Home = () => {
+const UserPage = () => {
   return (
     <div>
       <Header />
@@ -9,9 +10,8 @@ const Home = () => {
       <div className="w-full h-[calc(100vh-60px)]">
         <Outlet />
       </div>
-
     </div>
   )
 }
 
-export default Home
+export default UserPage;

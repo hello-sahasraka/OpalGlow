@@ -8,7 +8,7 @@ import AddProduct from "./Pages/Admin/AddProduct"
 import EditProduct from "./Pages/Admin/EditProduct"
 import MediaUpload from "../Uitils/MediaUpload"
 import Register from "./Pages/Client/Register"
-import Home from "./Pages/Home"
+import UserPage from "./Pages/UserPage"
 import ProductsPage from "./Pages/Client/ProductsPage"
 import ProductOverview from "./Pages/Client/ProductOverview"
 import Cart from "./Pages/Client/Cart"
@@ -20,6 +20,8 @@ import NotFound from "./Pages/NotFound"
 import AddUser from "./Pages/Admin/AddUser"
 import { ConfirmDialogProvider } from "./Components/ConfirmDialogProvider"
 import ForgetPassword from "./Pages/Client/forgetPassword"
+import Home from "./Pages/Client/Home"
+import Review from "./Pages/Client/Review"
 
 function App() {
   return (
@@ -46,10 +48,11 @@ function App() {
             </Route>
 
             {/* Public routes with Home as layout */}
-            <Route path="/" element={<Home />}> 
+            <Route path="/" element={<UserPage />}> 
+              <Route index element={<Home />} />
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/:id" element={<ProductOverview />} />
-              <Route path="reviews" element={<h1>Reviews</h1>} />
+              <Route path="reviews" element={<Review />} />
               <Route path="aboutus" element={<h1>About Us</h1>} />
               <Route path="cart" element={<Cart />} />
               <Route path="placeorder" element={<PlaceOrder />} />
