@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { ShoppingCart, Menu } from 'lucide-react';
+import { ShoppingCart, Menu, ShoppingBag } from 'lucide-react';
 import getCart from "../../Uitils/Cart";
 import { useEffect, useState } from "react";
 import UserData from "./UserData";
@@ -29,17 +29,23 @@ const Header = () => {
   ];
 
   return (
-    <div className="sticky top-0 w-full h-[60px] bg-rose-300/25 backdrop-blur-lg text-rose-900 font-semibold flex justify-between items-center px-4 sm:px-8 lg:px-20 shadow z-10">
+    <div className="sticky top-0 w-full h-[60px] bg-rose-300/25 backdrop-blur-lg text-rose-900 font-semibold flex justify-between items-center px-4 sm:px-8 lg:px-20 shadow z-30">
       {/* Mobile Menu Toggle */}
-      <div className="lg:hidden">
+      <div className="lg:hidden w-full flex justify-between items-center relative">
         <button onClick={() => setMenuOpen(!menuOpen)}>
           <Menu size={28} />
         </button>
+
+        <Link to="/" className="lg:mx-0 mx-auto absolute left-1/2 transform -translate-x-1/2 ">
+          <img src={opalglow} alt="OpalGlow Logo" className="h-8 scale-75" />
+        </Link>
       </div>
 
       {/* Desktop Navigation */}
       <div className="hidden lg:flex justify-between items-center w-full h-full">
-        <img src={opalglow} alt="OpalGlow Logo" className="h-8" />
+        <Link to="/">
+          <img src={opalglow} alt="OpalGlow Logo" className="h-9 scale-75" />
+        </Link>
         <div className="flex justify-between items-center w-[35%] h-full">
           {
             navLinks.map(({ path, label }) => {
@@ -53,17 +59,15 @@ const Header = () => {
               )
             })
           }
-          {/* <Link to="/">Home</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/reviews">Reviews</Link>
-          <Link to="/aboutus">About Us</Link> */}
-          <Link
-            to="/cart" className={`relative ${location.pathname === "/cart" && "text-rose-600 scale-105"}`}>
-            <ShoppingCart size={25} />
-            <span className="absolute -top-1 -right-1 bg-white border border-rose-600 text-rose-600 text-xs font-semibold px-1 rounded-full">
-              {itemAmount}
-            </span>
-          </Link>
+          <div title="View Cart" className="bg-rose-300 p-2 rounded-full relative ">
+            <Link
+              to="/cart" className={`${location.pathname === "/cart" && "text-rose-700 scale-105"}`}>
+              <ShoppingBag size={18} />
+              <span className="absolute -top-1 -right-1 bg-white border border-rose-700 text-rose-700 text-xs font-semibold px-1 rounded-full">
+                {itemAmount}
+              </span>
+            </Link>
+          </div>
         </div>
         <UserData />
       </div>
@@ -77,17 +81,17 @@ const Header = () => {
             <Link to="/reviews" onClick={() => setMenuOpen(false)}>Reviews</Link>
             <Link to="/aboutus" onClick={() => setMenuOpen(false)}>About Us</Link>
             <Link to="/cart" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
-              <ShoppingCart size={20} />
+              <ShoppingBag size={20} />
               <span className="relative">
                 Cart
-                <span className="absolute -top-2 -right-3 bg-rose-600 text-white text-xs font-bold px-1 rounded-full">
+                <span className="absolute -top-2 -right-3 bg-rose-700 text-white text-xs font-bold px-1 rounded-full">
                   {itemAmount}
                 </span>
               </span>
             </Link>
 
             {/* User Data Section for Mobile */}
-            <div className="border-t border-gray-200 pt-4">
+            <div className="border-t border-gray-300 mt-2 pt-4 scale-90">
               <UserData />
             </div>
           </div>

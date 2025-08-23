@@ -10,7 +10,8 @@ const ImageSlider = ({ image }) => {
     <div className='w-full h-full flex flex-col gap-2'>
 
       {/* Main Image */}
-      <div className='w-full h-[250px] sm:h-[300px] md:h-full lg:h-full bg-gray-100 rounded overflow-hidden drop-shadow-md flex items-center justify-center'>
+      <div className='w-full h-[250px] sm:h-[300px] md:h-full lg:h-full bg-gray-100 rounded
+      overflow-hidden drop-shadow-md flex items-center justify-center outline-4 outline-white/40 outline-offset-[-8px]'>
         <img
           src={images[activeIndex]}
           alt={`Product ${activeIndex + 1}`}
