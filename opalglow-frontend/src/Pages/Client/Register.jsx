@@ -69,7 +69,7 @@ const Register = () => {
       {/* Form container */}
       <form
         onSubmit={handleSubmit}
-        className="relative bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-96 z-10"
+        className="relative bg-white bg-opacity-90 p-8 mx-4  rounded-lg shadow-lg w-96 z-10"
       >
         <h2 className="text-3xl font-semibold mb-6 text-gray-900 text-center">Sign in to <span className='bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent'>OpalGlow</span></h2>
 

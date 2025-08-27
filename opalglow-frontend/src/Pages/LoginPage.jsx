@@ -102,7 +102,7 @@ const LoginPage = () => {
     >
       <div className="absolute inset-0 bg-black opacity-10"></div>
 
-      <div className="relative bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-96 z-10">
+      <div className="relative bg-white bg-opacity-90 p-8 mx-4 rounded-lg shadow-lg w-96 z-10">
         <h1 className='text-4xl font-semibold text-gray-900 text-center'>LogIn</h1>
         <p className='mt-4 text-[14px] text-gray-700 tracking-wide drop-shadow-sm text-center'>
           Welcome to Opal Glow Cosmetics
