@@ -7,7 +7,7 @@ const AboutUs = () => {
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] flex items-center justify-center bg-rose-50">
         <div className="text-2xl sm:text-3xl font-bold text-gray-900 py-8 sm:py-12">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">Discover What <span className="text-rose-500">Inspires</span> You Next</h1>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-center px-4">Discover What <span className="text-rose-500">Inspires</span> You Next</h1>
         </div>
         {/* <div className="relative z-10 text-center text-rose-700/80 px-6">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">About Us</h1>
