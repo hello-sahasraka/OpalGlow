@@ -22,21 +22,11 @@ const ProductCard = ({ product }) => {
           </Link>
         </div>
 
-        {/* Alternate Names (if available) */}
-        {/* {altNames && altNames.length > 0 && (
-          <p className="h-[30px] text-xs text-gray-600 italic tracking-wide">
-            Also known as: {altNames.join(', ')}
-          </p>
-        )} */}
-
-        {/* Description */}
-        {/* <p className="h-[40px] line-clamp-2 text-sm text-gray-700 leading-snug overflow-clip">{description}</p> */}
-
         {/* Price Section */}
         <div className="flex items-center justify-between">
-          <p className="text-rose-700 font-bold text-lg">${price.toFixed(2)}</p>
+          <p className="text-gray-700 font-bold text-2xl">${price.toFixed(2)}</p>
           {labeledPrice !== price && (
-            <p className="text-gray-500 text-sm line-through">${labeledPrice.toFixed(2)}</p>
+            <p className="text-gray-500 text-sm font-semibold line-through">${labeledPrice.toFixed(2)}</p>
           )}
         </div>
 

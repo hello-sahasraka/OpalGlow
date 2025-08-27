@@ -36,7 +36,7 @@ const Header = () => {
           <Menu size={28} />
         </button>
 
-        <Link to="/" className="lg:mx-0 mx-auto absolute left-1/2 transform -translate-x-1/2 ">
+        <Link to="/" className="lg:mx-0 mx-auto p-0 absolute left-1/2 transform -translate-x-1/2 ">
           <img src={opalglow} alt="OpalGlow Logo" className="h-8 scale-75" />
         </Link>
       </div>

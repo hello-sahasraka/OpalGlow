@@ -46,7 +46,7 @@ const ProductsPage = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div>
+        <div className=" bg-rose-50">
           <div className="w-full h-full flex flex-col px-4 sm:px-6 lg:px-20">
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-4 py-8 sm:py-12">

@@ -6,17 +6,15 @@ const AboutUs = () => {
     <div className="w-full">
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] flex items-center justify-center bg-rose-50">
-        {/* <img
-          src="https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg"
-          alt="About Us Hero"
-          className="absolute inset-0 w-full h-full object-cover opacity-70"
-        /> */}
-        <div className="relative z-10 text-center text-rose-700/80 px-6">
+        <div className="text-2xl sm:text-3xl font-bold text-gray-900 py-8 sm:py-12">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">Discover What <span className="text-rose-500">Inspires</span> You Next</h1>
+        </div>
+        {/* <div className="relative z-10 text-center text-rose-700/80 px-6">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">About Us</h1>
           <p className="mt-4 text-lg sm:text-xl max-w-2xl mx-auto">
             Discover the story behind OpalGlow – luxury cosmetics crafted with care and passion.
           </p>
-        </div>
+        </div> */}
       </section>
 
       {/* Our Story */}
