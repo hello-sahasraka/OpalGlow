@@ -109,7 +109,8 @@ const Home = () => {
         </div>
 
         {/* Cosmetic Categories */}
-        <div className="w-full mt-16 flex justify-center border-t-1 border-gray-300/90 ">
+        <div className="w-full mt-16 pt-6 flex flex-col items-center border-t-1 border-gray-300/90 ">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-700">Our Products</h1>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mt-16">
             {commeticTypeImages.map((item, index) => (
               <div
@@ -129,7 +130,7 @@ const Home = () => {
 
         {/* Trending Now Section */}
         <div className="w-full mt-16 border-t-1 border-gray-300/90 pt-6">
-          <h1 className="text-center text-2xl sm:text-3xl text-gray-700 font-semibold">Trending now</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-700 text-center">Trending now</h1>
           <div className="flex flex-wrap justify-center gap-6 sm:gap-8 mt-16">
             {trendingItems.map((item, index) => (
               <Link

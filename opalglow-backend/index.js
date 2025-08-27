@@ -8,6 +8,7 @@ import verifyJWt from './middleware/auth.js';
 import orderRoutes from './routes/orderRoutes.js';
 import cors from 'cors';
 import dotenv from "dotenv";
+import reviewRouter from './routes/reviewRoutes.js';
 dotenv.config()
 
 
@@ -37,6 +38,7 @@ app.use(verifyJWt);
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/order", orderRoutes);
+app.use("/api/review", reviewRouter);
 
 
 app.listen(3000, () => {

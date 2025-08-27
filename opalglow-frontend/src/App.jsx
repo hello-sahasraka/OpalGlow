@@ -22,6 +22,7 @@ import { ConfirmDialogProvider } from "./Components/ConfirmDialogProvider"
 import ForgetPassword from "./Pages/Client/forgetPassword"
 import Home from "./Pages/Client/Home"
 import Review from "./Pages/Client/Review"
+import AboutUs from "./Pages/Client/AboutUs"
 
 function App() {
   return (
@@ -53,7 +54,7 @@ function App() {
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/:id" element={<ProductOverview />} />
               <Route path="reviews" element={<Review />} />
-              <Route path="aboutus" element={<h1>About Us</h1>} />
+              <Route path="aboutus" element={<AboutUs />} />
               <Route path="cart" element={<Cart />} />
               <Route path="placeorder" element={<PlaceOrder />} />
               <Route path="*" element={<NotFound />} />
