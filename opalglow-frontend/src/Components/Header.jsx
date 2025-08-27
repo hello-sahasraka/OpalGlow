@@ -3,7 +3,7 @@ import { ShoppingCart, Menu, ShoppingBag } from 'lucide-react';
 import getCart from "../../Uitils/Cart";
 import { useEffect, useState } from "react";
 import UserData from "./UserData";
-import opalglow from "../assets/opalglow.png";
+import opalglow from "../assets/Opalglow.png";
 
 const Header = () => {
   const [itemAmount, setItemAmount] = useState(0);
