@@ -2,7 +2,7 @@ import Loader from '../../Components/Loader';
 import CartCard from '../../Components/CartCard';
 import { useEffect, useState } from 'react';
 import getCart, { removeFromCart } from '../../../Uitils/Cart';
-import emptyCartImage from '../../assets/empty_cart.png';
+import emptyCartImage from '../../assets/Empty_cart.png';
 import { useNavigate } from 'react-router-dom';
 
 import { useConfirmDialog } from '../../Components/ConfirmDialogProvider';
