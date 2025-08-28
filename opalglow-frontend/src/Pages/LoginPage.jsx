@@ -31,7 +31,7 @@ const LoginPage = () => {
         localStorage.setItem("token", response.data.token);
 
         const user = response.data.user;
-        if (user.role === "user") navigate("/products");
+        if (user.role === "user") navigate("/");
         else if (user.role === "admin") navigate("/admin/users");
       } catch (err) {
         console.log(err);
@@ -80,7 +80,7 @@ const LoginPage = () => {
       localStorage.setItem("token", response.data.token);
 
       const user = response.data.user;
-      if (user.role === "user") navigate("/products");
+      if (user.role === "user") navigate("/");
       else if (user.role === "admin") navigate("/admin/users");
     } catch (err) {
       console.log("Login Failed", err.response?.data);

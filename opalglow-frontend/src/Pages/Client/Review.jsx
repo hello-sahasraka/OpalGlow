@@ -97,24 +97,34 @@ const Review = () => {
                         <Footer />
                     </div>
                     {displayAddReview &&
-                        <div className='fixed inset-0 z-100 h-full w-full aspect-square bg-gray-800/50
-                        flex justify-center items-center'>
+                        <div className="fixed inset-0 z-100 h-full w-full bg-gray-800/50 flex justify-center items-center">
+                            <div className="w-[95%] max-w-md sm:max-w-sm my-6 bg-gray-100 rounded-xl shadow-lg p-6 sm:p-4 outline-2 outline-gray-500/30 outline-offset-[-8px]">
 
-                            <div className='w-[450px] bg-gray-100 rounded-xl shadow-lg p-8 outline-2 outline-gray-500/30 outline-offset-[-8px]'>
-                                <div className='w-full flex justify-end'><span className='text-gray-400 hover:text-rose-600 hover:scale-110 
-                                transition-all duration-100'
-                                    onClick={() => setDisplayAddReview(false)}><SquareX size={25} /></span></div>
-                                <h1 className='text-center text-gray-700/90 text-2xl font-semibold mt-2 py-2 border-b-1 
-                                border-gray-300'>Tell us how you liked your <span className='text-rose-500'>OpalGlow's</span> experience</h1>
-                                <div className='mt-8' >
-                                    <div className="w-full flex flex-col items-center justify-center space-x-1 my-4">
-                                        <h2 className='text-gray-700 font-semibold'>Rate and review</h2>
-                                        <div>
+                                {/* Close Button */}
+                                <div className="w-full flex justify-end">
+                                    <span
+                                        className="text-gray-400 hover:text-rose-600 hover:scale-110 transition-all duration-100 cursor-pointer"
+                                        onClick={() => setDisplayAddReview(false)}
+                                    >
+                                        <SquareX size={25} />
+                                    </span>
+                                </div>
+
+                                {/* Title */}
+                                <h1 className="text-center text-gray-700/90 text-xl sm:text-lg font-semibold mt-2 py-2 border-b border-gray-300">
+                                    Tell us how you liked your <span className="text-rose-500">OpalGlow's</span> experience
+                                </h1>
+
+                                {/* Rating Section */}
+                                <div className="mt-6">
+                                    <div className="w-full flex flex-col items-center justify-center my-4">
+                                        <h2 className="text-gray-700 font-semibold text-base sm:text-sm">Rate and review</h2>
+                                        <div className="flex space-x-1">
                                             {stars.map((star) => (
                                                 <span
                                                     key={star}
-                                                    className={`cursor-pointer text-4xl transition duration-200 
-                                                ${(hover || rating) >= star ? "text-yellow-400" : "text-gray-400"}`}
+                                                    className={`cursor-pointer text-3xl sm:text-2xl transition duration-200 
+                                                                ${(hover || rating) >= star ? "text-yellow-400" : "text-gray-400"}`}
                                                     onClick={() => setRating(star)}
                                                     onMouseEnter={() => setHover(star)}
                                                     onMouseLeave={() => setHover(0)}
@@ -123,18 +133,26 @@ const Review = () => {
                                                 </span>
                                             ))}
                                         </div>
-
                                     </div>
-                                    <textarea className='w-full h-32 p-2 border border-gray-400 rounded-lg placeholder:text-sm placeholder:text-gray-400'
-                                        placeholder='Write your review here...'
-                                        onChange={(e) => { setComment(e.target.value) }}></textarea>
 
-                                    <button className='mt-4 w-full bg-rose-500 text-white font-md py-2 rounded-lg hover:bg-rose-600 transition duration-200'
-                                        onClick={handleSubmitReview}>Submit Review</button>
+                                    {/* Textarea */}
+                                    <textarea
+                                        className="w-full h-28 sm:h-24 p-2 border border-gray-400 rounded-lg placeholder:text-sm placeholder:text-gray-400 resize-none"
+                                        placeholder="Write your review here..."
+                                        onChange={(e) => setComment(e.target.value)}
+                                    ></textarea>
+
+                                    {/* Button */}
+                                    <button
+                                        className="mt-4 w-full bg-rose-500 text-white font-medium py-2 rounded-lg hover:bg-rose-600 transition duration-200 text-base sm:text-sm"
+                                        onClick={handleSubmitReview}
+                                    >
+                                        Submit Review
+                                    </button>
                                 </div>
                             </div>
-
                         </div>
+
                     }
                 </div>
             )}
