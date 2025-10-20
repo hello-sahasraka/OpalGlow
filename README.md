@@ -1,8 +1,9 @@
 # 🚀 OpalGlow
 
 **OpalGlow** is a modern **e-commerce platform** built with **Express.js** for the backend and **React.js** for the frontend. It provides a seamless shopping experience with features like product browsing, cart management, authentication, and payment integration.  
+***
 
-The system focuses on:
+## 🎯 The system focuses on:
 
 - **🛒 Product Catalog & Management**  
   Browse, search, and manage products with categories, pricing, and stock availability.  
